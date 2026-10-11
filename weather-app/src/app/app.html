@@ -1,0 +1,112 @@
+<div class="weather-container">
+  <h1>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">
+      <path d="M12 2v2"/>
+      <path d="m4.93 4.93 1.41 1.41"/>
+      <path d="M20 12h2"/>
+      <path d="m19.07 4.93-1.41 1.41"/>
+      <path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/>
+      <path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/>
+      <path d="m8 22-.5 1"/>
+      <path d="m11 22-.5 1"/>
+    </svg>
+    Weather App
+  </h1>
+
+  <p class="subtitle">
+    Search for a city to check its current weather
+  </p>
+
+  <form class="search-box" (ngSubmit)="searchCity()">
+    <input
+      type="text"
+      name="city"
+      placeholder="Enter city name"
+      [ngModel]="cityName()"
+      (ngModelChange)="cityName.set($event)"
+      [disabled]="isLoading()"
+    />
+
+    <button type="submit" [disabled]="isLoading()">
+      @if (isLoading()) {
+        Loading...
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        Search
+      }
+    </button>
+  </form>
+
+  @if (isLoading()) {
+    <div class="status-message" role="status">
+      <span class="spinner"></span>
+      <p>Loading weather...</p>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="error-message" role="alert">
+      <p>{{ errorMessage() }}</p>
+    </div>
+  }
+
+  @if (weather(); as currentWeather) {
+    <div class="weather-card">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">
+          <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        {{ currentWeather.cityName }},
+        {{ currentWeather.country }}
+      </h2>
+
+      <p class="temperature">
+        {{ currentWeather.temperature }} °C
+      </p>
+
+      <p class="weather-condition">
+        {{ getWeatherDescription(currentWeather.weatherCode) }}
+      </p>
+
+      <div class="weather-details">
+        <div class="detail-item">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">
+              <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/>
+              <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>
+            </svg>
+            Humidity
+          </span>
+          <strong>{{ currentWeather.humidity }}%</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">
+              <path d="M17.7 7.7A2.5 2.5 0 1 1 19 12H2"/>
+              <path d="M9.6 4.6A2 2 0 1 1 11 8H2"/>
+              <path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>
+            </svg>
+            Wind Speed
+          </span>
+          <strong>{{ currentWeather.windSpeed }} km/h</strong>
+        </div>
+
+        <div class="detail-item">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Local Time
+          </span>
+          <strong>{{ currentWeather.time }}</strong>
+        </div>
+      </div>
+    </div>
+  }
+</div>
